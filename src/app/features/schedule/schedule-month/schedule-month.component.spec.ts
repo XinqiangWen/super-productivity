@@ -403,6 +403,23 @@ describe('ScheduleMonthComponent', () => {
       expect(cell.getAttribute('aria-label')).toContain('15');
     });
 
+    it('should use a translucent, readable background for desktop-widget day cells', () => {
+      const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
+      widgetRoot.classList.add('is-calendar-widget');
+      fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
+      fixture.detectChanges();
+
+      const cell = fixture.nativeElement.querySelector(
+        '[data-day="2026-01-15"]',
+      ) as HTMLElement;
+
+      const alpha = Number(
+        getComputedStyle(cell).backgroundColor.match(/\/ ([\d.]+)\)$/)?.[1],
+      );
+      expect(alpha).toBe(0.6);
+      widgetRoot.classList.remove('is-calendar-widget');
+    });
+
     it('should keep the overflow count in sync with the rendered event limit', () => {
       // Arrange
       const events = Array.from({ length: 7 }, (_, index) =>

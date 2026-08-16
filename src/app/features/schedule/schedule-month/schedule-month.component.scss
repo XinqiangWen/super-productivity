@@ -293,23 +293,24 @@
   .month-grid-container {
     height: calc(100vh - 42px);
     min-height: 0;
-    border-color: color-mix(in srgb, var(--separator-color) 58%, transparent);
+    border-color: color-mix(in srgb, var(--separator-color) 64%, transparent);
     background: transparent;
   }
 
   .weekday-header {
-    background: color-mix(in srgb, var(--bg) 56%, transparent);
-    border-color: color-mix(in srgb, var(--separator-color) 58%, transparent);
-    backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--bg) 68%, transparent);
+    border-color: color-mix(in srgb, var(--separator-color) 64%, transparent);
+    backdrop-filter: blur(16px);
   }
 
   .month-day-cell {
-    background: color-mix(in srgb, var(--bg) 42%, transparent);
-    border-color: color-mix(in srgb, var(--separator-color) 48%, transparent);
+    background: color-mix(in srgb, var(--bg) 60%, transparent);
+    border-color: color-mix(in srgb, var(--separator-color) 64%, transparent);
+    backdrop-filter: blur(16px);
 
     &:hover,
     &:focus-visible {
-      background: color-mix(in srgb, var(--bg-lighter) 72%, transparent);
+      background: color-mix(in srgb, var(--bg-lighter) 76%, transparent);
     }
   }
 }

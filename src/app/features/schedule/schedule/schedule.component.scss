@@ -124,9 +124,9 @@
     -webkit-app-region: drag;
     min-height: 42px;
     padding-left: var(--s);
-    border-color: color-mix(in srgb, var(--separator-color) 65%, transparent);
-    background: color-mix(in srgb, var(--bg) 62%, transparent);
-    backdrop-filter: blur(18px) saturate(1.1);
+    border-color: color-mix(in srgb, var(--separator-color) 68%, transparent);
+    background: color-mix(in srgb, var(--bg) 68%, transparent);
+    backdrop-filter: blur(16px) saturate(1.05);
   }
 
   .schedule-nav-controls button,
