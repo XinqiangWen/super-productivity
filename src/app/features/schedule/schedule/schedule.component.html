@@ -140,6 +140,18 @@
     <button
       mat-icon-button
       type="button"
+      (click)="toggleCalendarWidgetLock()"
+      [attr.aria-pressed]="isCalendarWidgetLocked()"
+      [attr.aria-label]="
+        isCalendarWidgetLocked() ? '解锁桌面月历位置' : '锁定桌面月历位置'
+      "
+      [title]="isCalendarWidgetLocked() ? '解锁位置' : '锁定位置'"
+    >
+      <mat-icon>{{ isCalendarWidgetLocked() ? 'lock' : 'lock_open' }}</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      type="button"
       (click)="closeCalendarWidget()"
       aria-label="关闭桌面月历"
       title="关闭桌面月历"

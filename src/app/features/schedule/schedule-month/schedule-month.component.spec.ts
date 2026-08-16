@@ -403,7 +403,7 @@ describe('ScheduleMonthComponent', () => {
       expect(cell.getAttribute('aria-label')).toContain('15');
     });
 
-    it('should use a translucent, readable background for desktop-widget day cells', () => {
+    it('should use the clean white TickTick-style surface for desktop-widget day cells', () => {
       const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
       widgetRoot.classList.add('is-calendar-widget');
       fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
@@ -413,11 +413,24 @@ describe('ScheduleMonthComponent', () => {
         '[data-day="2026-01-15"]',
       ) as HTMLElement;
 
-      const alpha = Number(
-        getComputedStyle(cell).backgroundColor.match(/\/ ([\d.]+)\)$/)?.[1],
-      );
-      expect(alpha).toBe(0.6);
+      expect(getComputedStyle(cell).backgroundColor).toBe('rgb(255, 255, 255)');
       widgetRoot.classList.remove('is-calendar-widget');
+    });
+
+    it('should keep dark ink on the white desktop-widget surface in dark theme', () => {
+      const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
+      document.body.classList.add('isDarkTheme');
+      widgetRoot.classList.add('is-calendar-widget');
+      fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
+      fixture.detectChanges();
+
+      const dayNumber = fixture.nativeElement.querySelector(
+        '[data-day="2026-01-15"] .month-day-number',
+      ) as HTMLElement;
+
+      expect(getComputedStyle(dayNumber).color).toBe('rgb(35, 38, 48)');
+      widgetRoot.classList.remove('is-calendar-widget');
+      document.body.classList.remove('isDarkTheme');
     });
 
     it('should keep the overflow count in sync with the rendered event limit', () => {

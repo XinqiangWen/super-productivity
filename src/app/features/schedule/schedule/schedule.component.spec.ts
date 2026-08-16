@@ -238,6 +238,19 @@ describe('ScheduleComponent', () => {
     });
   });
 
+  describe('desktop calendar controls', () => {
+    it('toggles the persisted desktop-position lock from the widget header', () => {
+      const oldEa = window.ea;
+      const setCalendarWidgetLocked = jasmine.createSpy('setCalendarWidgetLocked');
+      (window as any).ea = { setCalendarWidgetLocked };
+      component.toggleCalendarWidgetLock();
+
+      expect(setCalendarWidgetLocked).toHaveBeenCalledWith(true);
+      expect((component as any).isCalendarWidgetLocked()).toBeTrue();
+      (window as any).ea = oldEa;
+    });
+  });
+
   describe('_selectedDate signal', () => {
     it('should initialize as null (viewing today)', () => {
       expect(component['_selectedDate']()).toBeNull();

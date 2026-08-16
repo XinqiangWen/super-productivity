@@ -635,3 +635,24 @@
     filter: brightness(0.98);
   }
 }
+
+:host-context(.is-calendar-widget):host.month-schedule-event {
+  min-height: 20px;
+  height: 20px;
+  border-left-color: var(--project-color, #aab9dc);
+  background: color-mix(in srgb, var(--project-color, #dbe5ff) 42%, #fff);
+  color: #232630;
+
+  .month-task-check {
+    border-color: #8b919b;
+  }
+
+  .title {
+    color: #232630;
+    line-height: 18px;
+  }
+
+  .month-time {
+    color: #6d727c;
+  }
+}

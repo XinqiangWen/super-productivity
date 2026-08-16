@@ -203,6 +203,8 @@ const ea: ElectronAPI = {
   updateTaskWidgetSettings: (cfg) => _send('UPDATE_TASK_WIDGET_SETTINGS', cfg),
   openCalendarWidget: () => _send('OPEN_CALENDAR_WIDGET'),
   closeCalendarWidget: () => _send('CLOSE_CALENDAR_WIDGET'),
+  setCalendarWidgetLocked: (isLocked: boolean) =>
+    _send('SET_CALENDAR_WIDGET_LOCKED', isLocked),
   updateTitleBarDarkMode: (isDarkMode: boolean) =>
     _send('UPDATE_TITLE_BAR_DARK_MODE', isDarkMode),
   registerGlobalShortcuts: (keyboardCfg) =>

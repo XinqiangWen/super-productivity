@@ -118,15 +118,15 @@
 }
 
 :host-context(.is-calendar-widget) {
-  background: transparent;
+  background: #fff;
 
   .schedule-nav-controls {
     -webkit-app-region: drag;
-    min-height: 42px;
-    padding-left: var(--s);
-    border-color: color-mix(in srgb, var(--separator-color) 68%, transparent);
-    background: color-mix(in srgb, var(--bg) 68%, transparent);
-    backdrop-filter: blur(16px) saturate(1.05);
+    min-height: 50px;
+    padding: 0 14px;
+    border-color: #f0f1f3;
+    background: #fff;
+    backdrop-filter: none;
   }
 
   .schedule-nav-controls button,
@@ -150,9 +150,15 @@
     }
   }
 
+  .schedule-nav-controls .title,
+  .schedule-nav-controls button,
+  .schedule-nav-controls mat-icon {
+    color: #232630;
+  }
+
   .scroll-wrapper {
     overflow: hidden;
-    background: transparent;
+    background: #fff;
   }
 }
 

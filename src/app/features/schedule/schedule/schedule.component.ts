@@ -74,6 +74,10 @@ export class ScheduleComponent {
   readonly isCalendarWidget =
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).has('calendarWidget');
+  readonly isCalendarWidgetLocked = signal(
+    typeof window !== 'undefined' &&
+      new URLSearchParams(window.location.search).get('calendarWidgetLocked') === '1',
+  );
   taskService = inject(TaskService);
   layoutService = inject(LayoutService);
   scheduleService = inject(ScheduleService);
@@ -450,6 +454,14 @@ export class ScheduleComponent {
     }
   }
 
+  toggleCalendarWidgetLock(): void {
+    const nextValue = !this.isCalendarWidgetLocked();
+    this.isCalendarWidgetLocked.set(nextValue);
+    if (typeof window !== 'undefined') {
+      window.ea?.setCalendarWidgetLocked(nextValue);
+    }
+  }
+
   private getTimeView(): 'week' | 'month' | 'day' {
     const preservedView = localStorage.getItem(LS.SELECTED_TIME_VIEW);
     if (preservedView === 'month') return 'month';
@@ -461,6 +473,11 @@ export class ScheduleComponent {
     this.layoutService.selectedTimeView.set(
       this.isCalendarWidget ? 'month' : this.getTimeView(),
     );
+    if (this.isCalendarWidget && typeof window !== 'undefined') {
+      window.ea?.on('CALENDAR_WIDGET_LOCK_CHANGED', (isLocked: unknown) => {
+        this.isCalendarWidgetLocked.set(isLocked === true);
+      });
+    }
 
     effect(() => {
       if (this.isMonthView() === false) {

@@ -287,31 +287,46 @@
   }
 }
 
-// The Electron companion uses a transparent native window. Keep the calendar
-// itself legible without repainting the whole desktop-sized surface opaque.
+// The desktop companion keeps a clean white calendar surface; task colours
+// carry the visual hierarchy instead of a wallpaper-dependent backdrop.
 :host-context(.is-calendar-widget) {
   .month-grid-container {
-    height: calc(100vh - 42px);
+    height: calc(100vh - 50px);
     min-height: 0;
-    border-color: color-mix(in srgb, var(--separator-color) 64%, transparent);
-    background: transparent;
+    border-color: #f0f1f3;
+    background: #fff;
   }
 
   .weekday-header {
-    background: color-mix(in srgb, var(--bg) 68%, transparent);
-    border-color: color-mix(in srgb, var(--separator-color) 64%, transparent);
-    backdrop-filter: blur(16px);
+    background: #fff;
+    border-color: #f0f1f3;
+    backdrop-filter: none;
+    color: #8b8f98;
+    font-size: 13px;
   }
 
   .month-day-cell {
-    background: color-mix(in srgb, var(--bg) 60%, transparent);
-    border-color: color-mix(in srgb, var(--separator-color) 64%, transparent);
-    backdrop-filter: blur(16px);
+    background: #fff;
+    border-color: #f0f1f3;
+    backdrop-filter: none;
+    color: #232630;
 
     &:hover,
     &:focus-visible {
-      background: color-mix(in srgb, var(--bg-lighter) 76%, transparent);
+      background: #fafbfc;
     }
+
+    &.today .month-day-number {
+      color: #fff;
+    }
+  }
+
+  .month-day-number {
+    color: #232630;
+  }
+
+  .month-more-events {
+    color: #6d727c;
   }
 }
 

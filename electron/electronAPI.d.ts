@@ -245,6 +245,8 @@ export interface ElectronAPI {
 
   closeCalendarWidget(): void;
 
+  setCalendarWidgetLocked(isLocked: boolean): void;
+
   updateTitleBarDarkMode(isDarkMode: boolean): void;
 
   registerGlobalShortcuts(keyboardConfig: KeyboardConfig): void;

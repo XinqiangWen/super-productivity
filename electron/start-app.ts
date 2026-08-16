@@ -16,7 +16,11 @@ import { quitApp, showOrFocus } from './various-shared';
 import { closeWinAndQuit, createWindow, getIsAppReady } from './main-window';
 import { IdleTimeHandler } from './idle-time-handler';
 import { destroyTaskWidget } from './task-widget/task-widget';
-import { destroyCalendarWidget } from './calendar-widget/calendar-widget';
+import {
+  configureCalendarWidgetStartup,
+  destroyCalendarWidget,
+  openCalendarWidgetWhenMainWindowReady,
+} from './calendar-widget/calendar-widget';
 import {
   initializeProtocolHandling,
   processPendingProtocolUrls,
@@ -49,6 +53,7 @@ let mainWin: BrowserWindow;
 let idleTimeHandler: IdleTimeHandler;
 
 export const startApp = (): void => {
+  configureCalendarWidgetStartup(app);
   // Initialize protocol handling (registers second-instance listener for URL forwarding)
   initializeProtocolHandling(IS_DEV, app, () => mainWin);
 
@@ -515,6 +520,8 @@ export const startApp = (): void => {
       quitApp,
       customUrl,
     });
+
+    openCalendarWidgetWhenMainWindowReady(mainWin);
 
     initPluginOAuth(mainWin);
 
