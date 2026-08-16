@@ -413,7 +413,7 @@ describe('ScheduleMonthComponent', () => {
         '[data-day="2026-01-15"]',
       ) as HTMLElement;
 
-      expect(getComputedStyle(cell).backgroundColor).toBe('rgba(255, 255, 255, 0.56)');
+      expect(getComputedStyle(cell).backgroundColor).toBe('rgba(0, 0, 0, 0)');
       widgetRoot.classList.remove('is-calendar-widget');
     });
 
@@ -442,6 +442,22 @@ describe('ScheduleMonthComponent', () => {
       const weekday = fixture.nativeElement.querySelector('.weekday-header') as HTMLElement;
 
       expect(getComputedStyle(weekday).color).toBe('rgb(35, 38, 48)');
+      widgetRoot.classList.remove('is-calendar-widget');
+    });
+
+    it('should outline desktop-widget dates so they remain legible over wallpaper', () => {
+      const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
+      widgetRoot.classList.add('is-calendar-widget');
+      fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
+      fixture.detectChanges();
+
+      const dayNumber = fixture.nativeElement.querySelector(
+        '.month-day-number',
+      ) as HTMLElement;
+
+      expect(getComputedStyle(dayNumber).getPropertyValue('-webkit-text-stroke-width')).toBe(
+        '1px',
+      );
       widgetRoot.classList.remove('is-calendar-widget');
     });
 
