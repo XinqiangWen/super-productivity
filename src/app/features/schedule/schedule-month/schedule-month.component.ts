@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { ScheduleEvent } from '../schedule.model';
 import { ScheduleEventComponent } from '../schedule-event/schedule-event.component';
-import { CreateTaskPlaceholderComponent } from '../create-task-placeholder/create-task-placeholder.component';
+import { ScheduleTaskComposerComponent } from '../schedule-task-composer/schedule-task-composer.component';
 import { safeFormatDate } from 'src/app/util/safe-format-date';
 import { ScheduleService } from '../schedule.service';
 import { DateTimeFormatService } from 'src/app/core/date-time-format/date-time-format.service';
@@ -94,7 +94,7 @@ export const calculateMonthEventLimit = (
 
 @Component({
   selector: 'schedule-month',
-  imports: [ScheduleEventComponent, CreateTaskPlaceholderComponent, TranslatePipe],
+  imports: [ScheduleEventComponent, ScheduleTaskComposerComponent, TranslatePipe],
   templateUrl: './schedule-month.component.html',
   styleUrl: './schedule-month.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

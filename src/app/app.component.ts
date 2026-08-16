@@ -130,6 +130,9 @@ interface BeforeInstallPromptEvent extends Event {
   ],
 })
 export class AppComponent implements OnDestroy, AfterViewInit {
+  readonly isCalendarWidget =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).has('calendarWidget');
   private _globalConfigService = inject(GlobalConfigService);
   private _shortcutService = inject(ShortcutService);
   private _bannerService = inject(BannerService);

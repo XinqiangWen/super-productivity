@@ -201,6 +201,8 @@ const ea: ElectronAPI = {
     _send('TRANSFER_SETTINGS_TO_ELECTRON', globalCfg),
   sendSettingsUpdate: (globalCfg) => _send('UPDATE_SETTINGS', globalCfg),
   updateTaskWidgetSettings: (cfg) => _send('UPDATE_TASK_WIDGET_SETTINGS', cfg),
+  openCalendarWidget: () => _send('OPEN_CALENDAR_WIDGET'),
+  closeCalendarWidget: () => _send('CLOSE_CALENDAR_WIDGET'),
   updateTitleBarDarkMode: (isDarkMode: boolean) =>
     _send('UPDATE_TITLE_BAR_DARK_MODE', isDarkMode),
   registerGlobalShortcuts: (keyboardCfg) =>

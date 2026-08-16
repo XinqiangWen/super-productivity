@@ -25,6 +25,10 @@ import {
   hideTaskWidget,
   showTaskWidget,
 } from './task-widget/task-widget';
+import {
+  destroyCalendarWidget,
+  setCalendarWidgetMainWindow,
+} from './calendar-widget/calendar-widget';
 import { ensureIndicator } from './indicator';
 import { getIsMinimizeToTray, getIsQuiting, setIsQuiting } from './shared-state';
 import { loadSimpleStoreAll } from './simple-store';
@@ -228,6 +232,7 @@ export const createWindow = async ({
     transparent: false,
     // frame: true,
   });
+  setCalendarWidgetMainWindow(mainWin);
 
   // see: https://pratikpc.medium.com/bypassing-cors-with-electron-ab7eaf331605
   mainWin.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
@@ -620,6 +625,7 @@ const appCloseHandler = (app: App): void => {
     setIsQuiting(true);
     // Destroy task widget before closing main window to ensure window-all-closed fires
     destroyTaskWidget();
+    destroyCalendarWidget();
     mainWin.close();
   };
 
@@ -635,6 +641,7 @@ const appCloseHandler = (app: App): void => {
     if (ids.length === 0) {
       // Destroy task widget before closing main window
       destroyTaskWidget();
+      destroyCalendarWidget();
       mainWin.close();
     }
   });

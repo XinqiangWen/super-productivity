@@ -1,0 +1,201 @@
+:host {
+  position: fixed;
+  z-index: 1000;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: min(510px, calc(100vw - 32px));
+  transform: translate(-50%, -50%);
+}
+
+.task-composer {
+  position: relative;
+  min-height: 340px;
+  overflow: visible;
+  border: 1px solid color-mix(in srgb, var(--extra-border-color) 84%, transparent);
+  border-radius: 20px;
+  background: var(--bg-lighter);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 16%);
+  color: var(--text-color);
+}
+
+.task-composer__header,
+.task-composer__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 60px;
+  padding: 0 20px;
+}
+
+.task-composer__header {
+  border-bottom: 1px solid var(--extra-border-color);
+}
+
+.task-composer__date-button,
+.task-composer__flag-button,
+.task-composer__more-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-color-muted);
+  cursor: pointer;
+  font: inherit;
+}
+
+.task-composer__date-button {
+  padding-left: 0;
+  font-size: 16px;
+}
+
+.task-composer__flag-button {
+  color: var(--c-primary);
+}
+
+.task-composer__title {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-height: 210px;
+  resize: none;
+  padding: 22px 24px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.task-composer__title::placeholder {
+  color: var(--text-color-muted);
+  opacity: 0.65;
+}
+
+.task-composer__error {
+  margin: -8px 24px 12px;
+  color: var(--c-warn);
+  font-size: 13px;
+}
+
+.task-composer__footer {
+  border-top: 1px solid var(--extra-border-color);
+}
+
+.task-composer__project,
+.task-composer__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-composer__project mat-icon {
+  font-size: 20px;
+}
+
+.task-composer__save-button,
+.task-composer__confirm-date,
+.task-composer__clear-date {
+  min-width: 74px;
+  padding: 8px 18px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: var(--c-primary);
+  color: var(--c-contrast);
+  cursor: pointer;
+  font: inherit;
+}
+
+.task-composer__save-button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.task-composer__date-panel {
+  position: absolute;
+  z-index: 1;
+  top: 48px;
+  left: 12px;
+  width: min(328px, calc(100vw - 48px));
+  overflow: hidden;
+  border: 1px solid var(--extra-border-color);
+  border-radius: 16px;
+  background: var(--bg-lighter);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 18%);
+}
+
+.task-composer__date-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin: 16px;
+  padding: 3px;
+  border-radius: 9px;
+  background: var(--bg-darker);
+  text-align: center;
+}
+
+.task-composer__date-tabs span {
+  padding: 6px;
+  border-radius: 7px;
+  color: var(--text-color-muted);
+}
+
+.task-composer__date-tabs .is-active {
+  background: var(--bg-lighter);
+  color: var(--text-color);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+}
+
+.task-composer__date-panel datetime-picker {
+  display: block;
+  padding: 0 16px;
+}
+
+.task-composer__date-panel ::ng-deep {
+  datetime-picker .quick-access {
+    height: 42px;
+  }
+
+  datetime-picker .quick-access > button {
+    height: 42px;
+  }
+
+  datetime-picker mat-calendar {
+    min-height: 286px;
+  }
+}
+
+.task-composer__date-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 16px 20px;
+}
+
+.task-composer__clear-date {
+  border-color: var(--extra-border-color);
+  background: transparent;
+  color: var(--text-color);
+}
+
+@media (max-width: 599px) {
+  :host {
+    top: 24px;
+    transform: translateX(-50%);
+  }
+
+  .task-composer {
+    min-height: 300px;
+  }
+
+  .task-composer__title {
+    min-height: 160px;
+  }
+}

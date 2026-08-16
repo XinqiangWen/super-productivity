@@ -1,0 +1,105 @@
+<section
+  class="task-composer"
+  aria-label="新建计划任务"
+  (click)="$event.stopPropagation()"
+  (pointerdown)="$event.stopPropagation()"
+>
+  <header class="task-composer__header">
+    <button
+      class="task-composer__date-button"
+      type="button"
+      (click)="toggleDatePanel()"
+      [attr.aria-expanded]="isDatePanelOpen()"
+    >
+      <mat-icon>calendar_month</mat-icon>
+      <span>日期与提醒</span>
+    </button>
+    <span
+      class="task-composer__flag-button"
+      aria-hidden="true"
+    >
+      <mat-icon>flag</mat-icon>
+    </span>
+  </header>
+
+  <textarea
+    #titleInput
+    class="task-composer__title"
+    rows="3"
+    placeholder="准备做什么？"
+    [ngModel]="title()"
+    (ngModelChange)="title.set($event)"
+    (keydown)="onTitleKeydown($event)"
+  ></textarea>
+
+  @if (submissionError(); as submissionError) {
+    <p
+      class="task-composer__error"
+      role="alert"
+    >
+      {{ submissionError }}
+    </p>
+  }
+
+  <footer class="task-composer__footer">
+    <span class="task-composer__project">
+      <mat-icon>inbox</mat-icon>
+      收集箱
+    </span>
+    <span class="task-composer__actions">
+      <span
+        class="task-composer__more-button"
+        aria-hidden="true"
+      >
+        <mat-icon>more_horiz</mat-icon>
+      </span>
+      <button
+        type="button"
+        class="task-composer__save-button"
+        [disabled]="!title().trim() || isSubmitting() || submissionError()"
+        (click)="submit()"
+      >
+        添加
+      </button>
+    </span>
+  </footer>
+
+  @if (isDatePanelOpen()) {
+    <section
+      class="task-composer__date-panel"
+      aria-label="日期与时间"
+    >
+      <div class="task-composer__date-tabs">
+        <span class="is-active">日期</span>
+        <span>时间段</span>
+      </div>
+      <datetime-picker
+        [selectedDate]="selectedDate()"
+        [selectedTime]="selectedTime()"
+        [selectedReminderCfgId]="selectedReminder()"
+        [showQuickAccess]="true"
+        (dateSelected)="onDateSelected($event)"
+        (timeChanged)="selectedTime.set($event)"
+        (reminderChanged)="selectedReminder.set($event)"
+        (quickAccessClick)="onQuickAccessClick($event)"
+        (enterSubmit)="submit()"
+      ></datetime-picker>
+      <div class="task-composer__date-actions">
+        <button
+          type="button"
+          class="task-composer__confirm-date"
+          (click)="isDatePanelOpen.set(false)"
+        >
+          确定
+        </button>
+        <button
+          type="button"
+          class="task-composer__clear-date"
+          (click)="clearDateAndTime()"
+        >
+          清除
+        </button>
+      </div>
+    </section>
+  }
+</section>

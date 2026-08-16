@@ -43,6 +43,7 @@ import { DEFAULT_FIRST_DAY_OF_WEEK } from '../../../core/locale.constants';
 import { DateTimeFormatService } from '../../../core/date-time-format/date-time-format.service';
 import { getWeekNumber } from '../../../util/get-week-number';
 import { parseDbDateStr } from '../../../util/parse-db-date-str';
+import { IS_ELECTRON } from '../../../app.constants';
 
 @Component({
   selector: 'schedule',
@@ -69,6 +70,10 @@ import { parseDbDateStr } from '../../../util/parse-db-date-str';
 })
 export class ScheduleComponent {
   T = T;
+  readonly isElectron = IS_ELECTRON;
+  readonly isCalendarWidget =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).has('calendarWidget');
   taskService = inject(TaskService);
   layoutService = inject(LayoutService);
   scheduleService = inject(ScheduleService);
@@ -426,8 +431,23 @@ export class ScheduleComponent {
   }
 
   selectTimeView(view: 'week' | 'month' | 'day'): void {
+    if (this.isCalendarWidget && view !== 'month') {
+      return;
+    }
     this.layoutService.selectedTimeView.set(view);
     localStorage.setItem(LS.SELECTED_TIME_VIEW, view);
+  }
+
+  openCalendarWidget(): void {
+    if (typeof window !== 'undefined') {
+      window.ea?.openCalendarWidget();
+    }
+  }
+
+  closeCalendarWidget(): void {
+    if (typeof window !== 'undefined') {
+      window.ea?.closeCalendarWidget();
+    }
   }
 
   private getTimeView(): 'week' | 'month' | 'day' {
@@ -438,7 +458,9 @@ export class ScheduleComponent {
   }
 
   constructor() {
-    this.layoutService.selectedTimeView.set(this.getTimeView());
+    this.layoutService.selectedTimeView.set(
+      this.isCalendarWidget ? 'month' : this.getTimeView(),
+    );
 
     effect(() => {
       if (this.isMonthView() === false) {

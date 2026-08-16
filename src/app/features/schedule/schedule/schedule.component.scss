@@ -117,6 +117,19 @@
   }
 }
 
+:host-context(.is-calendar-widget) {
+  .schedule-nav-controls {
+    -webkit-app-region: drag;
+    min-height: 42px;
+    padding-left: var(--s);
+  }
+
+  .schedule-nav-controls button,
+  .schedule-nav-controls [matMenuTriggerFor] {
+    -webkit-app-region: no-drag;
+  }
+}
+
 .cal-color-dot {
   display: inline-block;
   width: 8px;

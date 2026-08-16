@@ -14,6 +14,10 @@
   min-height: -webkit-fill-available;
 }
 
+.app-container.is-calendar-widget magic-side-nav.calendar-widget-hidden {
+  display: none;
+}
+
 // Vertical action bar (opt-in via misc.isVerticalActionBar): reserve a
 // column on the right for the fixed action strip teleported by main-header
 // (desktop only). The strip is position: fixed, so this padding keeps the

@@ -26,16 +26,6 @@
           <span class="month-day-number">{{ dayNumberByDay()[day] }}</span>
         </div>
         <div class="month-day-events">
-          @if (taskCreatorDay() === day) {
-            <create-task-placeholder
-              class="month-create-task"
-              [isEditMode]="true"
-              time="12:00"
-              [date]="day"
-              [defaultForDayMode]="true"
-              (editEnd)="closeTaskCreator()"
-            ></create-task-placeholder>
-          }
           @for (ev of visibleDayEvents; track ev.id) {
             <div
               class="month-event"
@@ -68,3 +58,10 @@
     }
   }
 </div>
+
+@if (taskCreatorDay(); as taskCreatorDay) {
+  <schedule-task-composer
+    [day]="taskCreatorDay"
+    (closed)="closeTaskCreator()"
+  ></schedule-task-composer>
+}

@@ -241,6 +241,10 @@ export interface ElectronAPI {
 
   updateTaskWidgetSettings(cfg: TaskWidgetConfig): void;
 
+  openCalendarWidget(): void;
+
+  closeCalendarWidget(): void;
+
   updateTitleBarDarkMode(isDarkMode: boolean): void;
 
   registerGlobalShortcuts(keyboardConfig: KeyboardConfig): void;

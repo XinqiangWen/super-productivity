@@ -255,12 +255,6 @@
   }
 }
 
-.month-create-task {
-  flex: 0 0 48px;
-  min-height: 48px;
-  margin: 0;
-}
-
 @include mq(xs, max) {
   .month-grid-container {
     height: calc(100vh - 150px);

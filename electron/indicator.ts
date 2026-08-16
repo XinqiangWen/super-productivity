@@ -18,6 +18,7 @@ import {
   updateTaskWidgetTask,
 } from './task-widget/task-widget';
 import { getWin } from './main-window';
+import { initCalendarWidgetListener } from './calendar-widget/calendar-widget';
 
 type IndicatorConfig = {
   showApp: () => void;
@@ -206,6 +207,7 @@ function initListeners(): void {
   // Task widget settings are per-instance (not synced) — handled via a
   // dedicated IPC channel in task-widget.ts.
   initTaskWidgetSettingsListener();
+  initCalendarWidgetListener();
 
   ipcMain.on(IPC.SET_PROGRESS_BAR, (ev: IpcMainEvent, { progress }) => {
     if (_isRunning && tray) {

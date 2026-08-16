@@ -12,7 +12,7 @@ import { ScheduleService } from '../schedule.service';
 import { DateTimeFormatService } from '../../../core/date-time-format/date-time-format.service';
 import { parseDbDateStr } from '../../../util/parse-db-date-str';
 import { ScheduleEventComponent } from '../schedule-event/schedule-event.component';
-import { CreateTaskPlaceholderComponent } from '../create-task-placeholder/create-task-placeholder.component';
+import { ScheduleTaskComposerComponent } from '../schedule-task-composer/schedule-task-composer.component';
 import { ScheduleEvent } from '../schedule.model';
 import { SVEType } from '../schedule.const';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -50,10 +50,10 @@ describe('ScheduleMonthComponent', () => {
     })
       .overrideComponent(ScheduleMonthComponent, {
         remove: {
-          imports: [ScheduleEventComponent, CreateTaskPlaceholderComponent],
+          imports: [ScheduleEventComponent, ScheduleTaskComposerComponent],
         },
         add: {
-          imports: [ScheduleEventStubComponent, CreateTaskPlaceholderStubComponent],
+          imports: [ScheduleEventStubComponent, ScheduleTaskComposerStubComponent],
         },
       })
       .compileComponents();
@@ -341,12 +341,11 @@ describe('ScheduleMonthComponent', () => {
       fixture.detectChanges();
 
       // Assert
-      const placeholder = fixture.debugElement.query(
-        By.directive(CreateTaskPlaceholderStubComponent),
+      const composer = fixture.debugElement.query(
+        By.directive(ScheduleTaskComposerStubComponent),
       );
-      expect(placeholder).not.toBeNull();
-      expect(placeholder.componentInstance.date).toBe('2026-01-15');
-      expect(placeholder.componentInstance.defaultForDayMode).toBeTrue();
+      expect(composer).not.toBeNull();
+      expect(composer.componentInstance.day).toBe('2026-01-15');
     });
 
     it('should open a day-planning task editor from the keyboard', () => {
@@ -364,7 +363,7 @@ describe('ScheduleMonthComponent', () => {
       // Assert
       expect(dayCell.getAttribute('tabindex')).toBe('0');
       expect(
-        fixture.debugElement.query(By.directive(CreateTaskPlaceholderStubComponent)),
+        fixture.debugElement.query(By.directive(ScheduleTaskComposerStubComponent)),
       ).not.toBeNull();
     });
 
@@ -825,15 +824,12 @@ class ScheduleEventStubComponent {
 }
 
 @Component({
-  selector: 'create-task-placeholder',
+  selector: 'schedule-task-composer',
   standalone: true,
-  template: '<input class="task-title-input" />',
+  template: '<textarea class="task-title-input"></textarea>',
 })
-class CreateTaskPlaceholderStubComponent {
-  @Input() isEditMode?: boolean;
-  @Input() time?: string;
-  @Input() date?: string;
-  @Input() defaultForDayMode?: boolean;
+class ScheduleTaskComposerStubComponent {
+  @Input() day?: string;
 }
 
 const createTaskScheduleEvent = (id: string, plannedForDay: string): ScheduleEvent => ({

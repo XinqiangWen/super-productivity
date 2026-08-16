@@ -1,39 +1,41 @@
 <div class="schedule-nav-controls">
-  <div class="time-view-selector">
-    <button
-      mat-icon-button
-      class="time-view-btn e2e-day-view-btn"
-      [class.active]="isDayView()"
-      [attr.aria-pressed]="isDayView()"
-      (click)="selectTimeView('day')"
-      [matTooltip]="T.F.SCHEDULE.VIEW_DAY | translate"
-      [attr.aria-label]="T.F.SCHEDULE.VIEW_DAY | translate"
-    >
-      <mat-icon>calendar_view_day</mat-icon>
-    </button>
-    <button
-      mat-icon-button
-      class="time-view-btn"
-      [class.active]="isWeekView()"
-      [attr.aria-pressed]="isWeekView()"
-      (click)="selectTimeView('week')"
-      [matTooltip]="T.F.SCHEDULE.VIEW_WEEK | translate"
-      [attr.aria-label]="T.F.SCHEDULE.VIEW_WEEK | translate"
-    >
-      <mat-icon>view_week</mat-icon>
-    </button>
-    <button
-      mat-icon-button
-      class="time-view-btn"
-      [class.active]="isMonthView()"
-      [attr.aria-pressed]="isMonthView()"
-      (click)="selectTimeView('month')"
-      [matTooltip]="T.F.SCHEDULE.VIEW_MONTH | translate"
-      [attr.aria-label]="T.F.SCHEDULE.VIEW_MONTH | translate"
-    >
-      <mat-icon>calendar_month</mat-icon>
-    </button>
-  </div>
+  @if (!isCalendarWidget) {
+    <div class="time-view-selector">
+      <button
+        mat-icon-button
+        class="time-view-btn e2e-day-view-btn"
+        [class.active]="isDayView()"
+        [attr.aria-pressed]="isDayView()"
+        (click)="selectTimeView('day')"
+        [matTooltip]="T.F.SCHEDULE.VIEW_DAY | translate"
+        [attr.aria-label]="T.F.SCHEDULE.VIEW_DAY | translate"
+      >
+        <mat-icon>calendar_view_day</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="time-view-btn"
+        [class.active]="isWeekView()"
+        [attr.aria-pressed]="isWeekView()"
+        (click)="selectTimeView('week')"
+        [matTooltip]="T.F.SCHEDULE.VIEW_WEEK | translate"
+        [attr.aria-label]="T.F.SCHEDULE.VIEW_WEEK | translate"
+      >
+        <mat-icon>view_week</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="time-view-btn"
+        [class.active]="isMonthView()"
+        [attr.aria-pressed]="isMonthView()"
+        (click)="selectTimeView('month')"
+        [matTooltip]="T.F.SCHEDULE.VIEW_MONTH | translate"
+        [attr.aria-label]="T.F.SCHEDULE.VIEW_MONTH | translate"
+      >
+        <mat-icon>calendar_month</mat-icon>
+      </button>
+    </div>
+  }
 
   @if (showCalFilterBtn()) {
     <button
@@ -134,6 +136,28 @@
   </div>
 
   <div class="title">{{ headerTitle() }}</div>
+  @if (isCalendarWidget) {
+    <button
+      mat-icon-button
+      type="button"
+      (click)="closeCalendarWidget()"
+      aria-label="关闭桌面月历"
+      title="关闭桌面月历"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+  @if (isElectron && !isCalendarWidget) {
+    <button
+      mat-icon-button
+      type="button"
+      (click)="openCalendarWidget()"
+      aria-label="打开桌面月历"
+      title="打开桌面月历"
+    >
+      <mat-icon>open_in_new</mat-icon>
+    </button>
+  }
 </div>
 
 <div
