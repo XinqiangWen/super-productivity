@@ -169,7 +169,14 @@ test('Windows login registration opens the desktop calendar after the main windo
   mainWebContents.emit('did-finish-load');
   await new Promise((resolve) => setImmediate(resolve));
 
-  assert.deepEqual(loginSettings, [{ openAtLogin: true }]);
+  // Login-item registration is deliberately Windows-only (configureCalendarWidgetStartup
+  // guards on process.platform); on other platforms the startup hook must not touch
+  // login items, while the widget still opens.
+  if (process.platform === 'win32') {
+    assert.deepEqual(loginSettings, [{ openAtLogin: true }]);
+  } else {
+    assert.deepEqual(loginSettings, []);
+  }
   assert.equal(createdWindows.length, 1);
 });
 
