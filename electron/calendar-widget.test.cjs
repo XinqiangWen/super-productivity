@@ -12,12 +12,13 @@ let createdWindows = [];
 let savedStore = {};
 
 class FakeWebContents {
-  constructor() {
+  constructor(url = 'file:///app/index.html#/schedule') {
     this._handlers = new Map();
+    this._url = url;
   }
 
   getURL() {
-    return 'file:///app/index.html#/schedule';
+    return this._url;
   }
 
   on(name, handler) {
@@ -29,6 +30,9 @@ class FakeWebContents {
   }
 
   emit(name) {
+    if (name === 'did-finish-load' && !this._url) {
+      this._url = 'file:///app/index.html#/schedule';
+    }
     this._handlers.get(name)?.();
   }
 
@@ -154,7 +158,7 @@ test('locking the calendar window disables moving and resizing', async () => {
 
 test('Windows login registration opens the desktop calendar after the main window loads', async () => {
   const loginSettings = [];
-  const mainWebContents = new FakeWebContents();
+  const mainWebContents = new FakeWebContents('');
   const mod = loadModule();
   mod.setCalendarWidgetMainWindow({ isDestroyed: () => false, webContents: mainWebContents });
 
@@ -166,5 +170,16 @@ test('Windows login registration opens the desktop calendar after the main windo
   await new Promise((resolve) => setImmediate(resolve));
 
   assert.deepEqual(loginSettings, [{ openAtLogin: true }]);
+  assert.equal(createdWindows.length, 1);
+});
+
+test('opens the desktop calendar immediately when the main window already has a URL', async () => {
+  const mainWebContents = new FakeWebContents();
+  const mod = loadModule();
+  mod.setCalendarWidgetMainWindow({ isDestroyed: () => false, webContents: mainWebContents });
+
+  mod.openCalendarWidgetWhenMainWindowReady({ webContents: mainWebContents });
+  await new Promise((resolve) => setImmediate(resolve));
+
   assert.equal(createdWindows.length, 1);
 });

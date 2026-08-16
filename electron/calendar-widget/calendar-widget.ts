@@ -40,6 +40,14 @@ export const configureCalendarWidgetStartup = (
 export const openCalendarWidgetWhenMainWindowReady = (
   mainWindow: Pick<BrowserWindow, 'webContents'>,
 ): void => {
+  // createWindow() begins navigation before returning. When that navigation has
+  // already set a URL, attaching a one-shot did-finish-load listener can miss
+  // the event and leave the desktop companion closed for the whole session.
+  if (mainWindow.webContents.getURL()) {
+    void openCalendarWidget();
+    return;
+  }
+
   mainWindow.webContents.once('did-finish-load', () => {
     void openCalendarWidget();
   });
