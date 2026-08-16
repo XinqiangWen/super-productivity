@@ -119,30 +119,17 @@ export class ScheduleMonthComponent {
     this._viewportSize.set(this.getViewportSize());
   }
 
-  // Generate weekday headers based on firstDayOfWeek setting
+  // Generate weekday headers based on firstDayOfWeek setting. The labels are
+  // fixed Chinese tokens (TickTick-style), but the order still follows the
+  // user-configured firstDayOfWeek (0 = Sunday, 1 = Monday).
   readonly weekdayHeaders = computed(() => {
+    const chineseWeekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     const firstDay = this.firstDayOfWeek();
-    const headers: string[] = [];
-    const isoTextLocale = this._dateTimeFormatService.isoTextLocale();
-    const formatter = isoTextLocale
-      ? new Intl.DateTimeFormat(isoTextLocale, { weekday: 'short' })
-      : null;
-    const locale = this._dateTimeFormatService.currentLocale();
 
-    // Create a date for each day of week (using a week starting on Sunday)
-    // January 2, 2000 was a Sunday
-    const sundayDate = new Date(2000, 0, 2);
-
-    for (let i = 0; i < 7; i++) {
-      const dayIndex = (firstDay + i) % 7;
-      const date = new Date(sundayDate);
-      date.setDate(sundayDate.getDate() + dayIndex);
-      headers.push(
-        formatter ? formatter.format(date) : safeFormatDate(date, 'EEE', locale),
-      );
-    }
-
-    return headers;
+    return Array.from(
+      { length: 7 },
+      (_, index) => chineseWeekdays[(firstDay + index) % 7],
+    );
   });
 
   // Precompute the day-of-month label for every visible day, keyed on the day

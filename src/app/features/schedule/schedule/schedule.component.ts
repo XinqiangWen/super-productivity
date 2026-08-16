@@ -227,7 +227,7 @@ export class ScheduleComponent {
 
     if (this.isMonthView()) {
       const mid = parseDbDateStr(days[Math.floor(days.length / 2)]);
-      return safeFormatDate(mid, 'LLLL yyyy', locale);
+      return `${mid.getFullYear()}年${mid.getMonth() + 1}月`;
     }
 
     const start = parseDbDateStr(days[0]);

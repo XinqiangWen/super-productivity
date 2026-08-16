@@ -157,10 +157,12 @@ describe('ScheduleComponent', () => {
       expect(component.headerTitle()).toMatch(/^Week 17 · .+ – .+$/);
     });
 
-    it('returns month + year in month view', () => {
+    it('returns a Chinese year/month title in month view', () => {
       mockLayoutService.selectedTimeView.set('month');
-      const days = Array.from({ length: 35 }, (_, i) => {
-        const d = new Date(2026, 3, 1 + i);
+      // August 2026, Monday-first: 2026-08-01 is a Saturday, so the visible
+      // grid starts on Monday 2026-07-27 and runs 42 days into September.
+      const days = Array.from({ length: 42 }, (_, i) => {
+        const d = new Date(2026, 6, 27 + i);
         const y = d.getFullYear();
         const m = String(d.getMonth() + 1).padStart(2, '0');
         const day = String(d.getDate()).padStart(2, '0');
@@ -168,7 +170,7 @@ describe('ScheduleComponent', () => {
       });
       mockScheduleService.getMonthDaysToShow.and.returnValue(days);
       fixture.detectChanges();
-      expect(component.headerTitle()).toMatch(/April\s+2026/);
+      expect(component.headerTitle()).toBe('2026年8月');
     });
 
     const useIsoDatesWithUiLanguage = (language: string): void => {
@@ -208,7 +210,7 @@ describe('ScheduleComponent', () => {
       expect(component.headerTitle()).toContain('Jul');
     });
 
-    it('uses the UI language for the ISO month heading', () => {
+    it('uses a fixed Chinese month heading regardless of UI language', () => {
       useIsoDatesWithUiLanguage('en');
       mockLayoutService.selectedTimeView.set('month');
       const monthDays = Array.from({ length: 35 }, (_, i) => {
@@ -223,7 +225,7 @@ describe('ScheduleComponent', () => {
       component['_selectedDate'].set(new Date(2026, 6, 1));
       fixture.detectChanges();
 
-      expect(component.headerTitle()).toContain('July');
+      expect(component.headerTitle()).toBe('2026年7月');
     });
 
     it('preserves Gregorian dates and Latin digits in Persian ISO day headings', () => {

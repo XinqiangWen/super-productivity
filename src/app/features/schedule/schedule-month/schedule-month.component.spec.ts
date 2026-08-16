@@ -439,7 +439,9 @@ describe('ScheduleMonthComponent', () => {
       fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
       fixture.detectChanges();
 
-      const weekday = fixture.nativeElement.querySelector('.weekday-header') as HTMLElement;
+      const weekday = fixture.nativeElement.querySelector(
+        '.weekday-header',
+      ) as HTMLElement;
 
       expect(getComputedStyle(weekday).color).toBe('rgb(248, 251, 255)');
       widgetRoot.classList.remove('is-calendar-widget');
@@ -455,9 +457,9 @@ describe('ScheduleMonthComponent', () => {
         '.month-day-number',
       ) as HTMLElement;
 
-      expect(getComputedStyle(dayNumber).getPropertyValue('-webkit-text-stroke-width')).toBe(
-        '0.75px',
-      );
+      expect(
+        getComputedStyle(dayNumber).getPropertyValue('-webkit-text-stroke-width'),
+      ).toBe('0.75px');
       widgetRoot.classList.remove('is-calendar-widget');
     });
 
@@ -640,30 +642,34 @@ describe('ScheduleMonthComponent', () => {
       expect(headers.length).toBe(7);
     });
 
-    it('should start with Sunday when firstDayOfWeek is 0', () => {
-      // Arrange
+    it('renders Chinese labels in Sunday-first order', () => {
       fixture.componentRef.setInput('firstDayOfWeek', 0);
       fixture.detectChanges();
 
-      // Act
-      const headers = component.weekdayHeaders();
-
-      // Assert
-      // Sunday should be first
-      expect(headers[0]).toBe('So');
+      expect(component.weekdayHeaders()).toEqual([
+        '周日',
+        '周一',
+        '周二',
+        '周三',
+        '周四',
+        '周五',
+        '周六',
+      ]);
     });
 
-    it('should start with Monday when firstDayOfWeek is 1', () => {
-      // Arrange
+    it('renders Chinese labels in Monday-first order', () => {
       fixture.componentRef.setInput('firstDayOfWeek', 1);
       fixture.detectChanges();
 
-      // Act
-      const headers = component.weekdayHeaders();
-
-      // Assert
-      // Monday should be first
-      expect(headers[0]).toBe('Mo');
+      expect(component.weekdayHeaders()).toEqual([
+        '周一',
+        '周二',
+        '周三',
+        '周四',
+        '周五',
+        '周六',
+        '周日',
+      ]);
     });
 
     it('should cycle correctly for all days of week', () => {
