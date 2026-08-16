@@ -19,7 +19,12 @@ let isCalendarWidgetLocked = false;
 let boundsPersistTimer: NodeJS.Timeout | null = null;
 
 const CALENDAR_WIDGET_SETTINGS_KEY = 'calendarWidget';
-type CalendarWidgetBounds = Readonly<{ x: number; y: number; width: number; height: number }>;
+type CalendarWidgetBounds = Readonly<{
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}>;
 type CalendarWidgetSettings = Readonly<{
   bounds: CalendarWidgetBounds;
   isLocked: boolean;

@@ -229,7 +229,7 @@ for (const file of sourceFiles) {
         const componentScoped = anyDefs.has(name);
         anyComponentScoped ||= componentScoped;
         offenders.push({
-          location: `${path.relative(REPO_ROOT, file)}:${idx + 1}`,
+          location: `${path.relative(REPO_ROOT, file).split(path.sep).join('/')}:${idx + 1}`,
           name: componentScoped ? `${name}   (component-scoped)` : name,
         });
       }
