@@ -1,4 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { deviceType } from 'detect-it';
+import { BodyClass } from '../../app.constants';
+import { IS_TOUCH_PRIMARY } from '../../util/is-mouse-primary';
 import { InputIntentService, _inputIntentSignal } from './input-intent.service';
 
 describe('InputIntentService', () => {
@@ -18,12 +21,25 @@ describe('InputIntentService', () => {
     expect(service.currentIntent()).toBe('mouse');
   });
 
-  it('should not modify body classes on non-hybrid device (test env is mouseOnly)', () => {
+  it('should not modify body classes on mouseOnly devices, only write the initial class otherwise', () => {
+    // detect-it evaluates the physical device, so a touch-capable Windows host
+    // runs this spec as hybrid; assert the documented behavior for both cases.
+    document.body.classList.remove(BodyClass.isMousePrimary, BodyClass.isTouchPrimary);
     const beforeClasses = Array.from(document.body.classList);
     TestBed.configureTestingModule({});
     TestBed.inject(InputIntentService);
     const afterClasses = Array.from(document.body.classList);
-    expect(afterClasses).toEqual(beforeClasses);
+
+    if (deviceType === 'mouseOnly') {
+      expect(afterClasses).toEqual(beforeClasses);
+    } else {
+      expect(afterClasses).toEqual([
+        ...beforeClasses,
+        IS_TOUCH_PRIMARY ? BodyClass.isTouchPrimary : BodyClass.isMousePrimary,
+      ]);
+    }
+
+    document.body.classList.remove(BodyClass.isMousePrimary, BodyClass.isTouchPrimary);
   });
 
   describe('_inputIntentSignal', () => {
