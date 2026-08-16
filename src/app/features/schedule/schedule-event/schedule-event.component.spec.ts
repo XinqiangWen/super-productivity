@@ -347,6 +347,19 @@ describe('ScheduleEventComponent – isReferenceCalendar', () => {
       );
     });
 
+    it('renders the compact 22px month strip on a non-transparent pastel surface', () => {
+      fixture.componentRef.setInput('event', makeTaskScheduleEvent());
+      fixture.componentRef.setInput('isMonthView', true);
+      fixture.detectChanges();
+      fixture.nativeElement.style.setProperty('--project-color', '#4a90d9');
+
+      const host = fixture.nativeElement as HTMLElement;
+      const styles = getComputedStyle(host);
+      expect(styles.height).toBe('22px');
+      expect(styles.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+      expect(styles.borderLeftWidth).toBe('2px');
+    });
+
     it('should keep a deep project colour on a readable light widget task strip', () => {
       const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
       widgetRoot.classList.add('is-calendar-widget');

@@ -403,6 +403,22 @@ describe('ScheduleMonthComponent', () => {
       expect(cell.getAttribute('aria-label')).toContain('15');
     });
 
+    it('keeps the normal month grid on the solid app surface (no widget leak)', () => {
+      fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
+      fixture.detectChanges();
+
+      const cell = fixture.nativeElement.querySelector('.month-day-cell') as HTMLElement;
+      const weekday = fixture.nativeElement.querySelector(
+        '.weekday-header',
+      ) as HTMLElement;
+
+      // Outside .is-calendar-widget the day cell must sit on the app surface
+      // (--bg), never transparent, and weekday text must not carry the widget
+      // dark text stroke.
+      expect(getComputedStyle(cell).backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+      expect(getComputedStyle(weekday).webkitTextStrokeWidth).not.toBe('0.75px');
+    });
+
     it('should keep desktop-widget day cells translucent so the wallpaper remains visible', () => {
       const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
       widgetRoot.classList.add('is-calendar-widget');

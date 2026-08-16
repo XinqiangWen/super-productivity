@@ -344,8 +344,8 @@
   height: calc(100vh - 118px);
   min-height: 460px;
   overflow: hidden;
-  border-top: 1px solid var(--separator-color);
-  border-left: 1px solid var(--separator-color);
+  border-top: 1px solid color-mix(in srgb, var(--separator-color) 60%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--separator-color) 60%, transparent);
 }
 
 .weekday-header {
@@ -360,6 +360,7 @@
   color: var(--text-color-muted);
   font-size: 13px;
   font-weight: 400;
+  letter-spacing: 0;
   line-height: 1;
 }
 
@@ -379,7 +380,10 @@
     }
   }
 
-  &:hover,
+  &:hover {
+    background: color-mix(in srgb, var(--bg-lighter) 65%, transparent);
+  }
+
   &.drag-over {
     background: var(--bg-lighter);
   }
