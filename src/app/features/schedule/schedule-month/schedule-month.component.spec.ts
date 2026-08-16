@@ -12,6 +12,7 @@ import { ScheduleService } from '../schedule.service';
 import { DateTimeFormatService } from '../../../core/date-time-format/date-time-format.service';
 import { parseDbDateStr } from '../../../util/parse-db-date-str';
 import { ScheduleEventComponent } from '../schedule-event/schedule-event.component';
+import { CreateTaskPlaceholderComponent } from '../create-task-placeholder/create-task-placeholder.component';
 import { ScheduleEvent } from '../schedule.model';
 import { SVEType } from '../schedule.const';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -48,8 +49,12 @@ describe('ScheduleMonthComponent', () => {
       ],
     })
       .overrideComponent(ScheduleMonthComponent, {
-        remove: { imports: [ScheduleEventComponent] },
-        add: { imports: [ScheduleEventStubComponent] },
+        remove: {
+          imports: [ScheduleEventComponent, CreateTaskPlaceholderComponent],
+        },
+        add: {
+          imports: [ScheduleEventStubComponent, CreateTaskPlaceholderStubComponent],
+        },
       })
       .compileComponents();
 
@@ -321,6 +326,66 @@ describe('ScheduleMonthComponent', () => {
       fixture.detectChanges();
 
       expect(fixture.nativeElement.querySelector('.month-more-events')).toBeNull();
+    });
+  });
+
+  describe('day planning', () => {
+    it('should open a day-planning task editor when a day cell is clicked', () => {
+      // Arrange
+      fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
+      fixture.detectChanges();
+
+      // Act
+      const dayCell = fixture.nativeElement.querySelector('[data-day="2026-01-15"]');
+      dayCell.click();
+      fixture.detectChanges();
+
+      // Assert
+      const placeholder = fixture.debugElement.query(
+        By.directive(CreateTaskPlaceholderStubComponent),
+      );
+      expect(placeholder).not.toBeNull();
+      expect(placeholder.componentInstance.date).toBe('2026-01-15');
+      expect(placeholder.componentInstance.defaultForDayMode).toBeTrue();
+    });
+
+    it('should open a day-planning task editor from the keyboard', () => {
+      // Arrange
+      fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
+      fixture.detectChanges();
+      const dayCell = fixture.nativeElement.querySelector('[data-day="2026-01-15"]');
+
+      // Act
+      dayCell.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
+      );
+      fixture.detectChanges();
+
+      // Assert
+      expect(dayCell.getAttribute('tabindex')).toBe('0');
+      expect(
+        fixture.debugElement.query(By.directive(CreateTaskPlaceholderStubComponent)),
+      ).not.toBeNull();
+    });
+
+    it('should not intercept spaces typed into the task editor', () => {
+      // Arrange
+      fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
+      fixture.detectChanges();
+      fixture.nativeElement.querySelector('[data-day="2026-01-15"]').click();
+      fixture.detectChanges();
+      const taskTitleInput = fixture.nativeElement.querySelector('.task-title-input');
+      const event = new KeyboardEvent('keydown', {
+        key: ' ',
+        bubbles: true,
+        cancelable: true,
+      });
+
+      // Act
+      taskTitleInput.dispatchEvent(event);
+
+      // Assert
+      expect(event.defaultPrevented).toBeFalse();
     });
   });
 
@@ -757,6 +822,18 @@ class ScheduleEventStubComponent {
   @Input() event?: ScheduleEvent;
   @Input() isMonthView?: boolean;
   @Input() cdkDragDisabled?: boolean;
+}
+
+@Component({
+  selector: 'create-task-placeholder',
+  standalone: true,
+  template: '<input class="task-title-input" />',
+})
+class CreateTaskPlaceholderStubComponent {
+  @Input() isEditMode?: boolean;
+  @Input() time?: string;
+  @Input() date?: string;
+  @Input() defaultForDayMode?: boolean;
 }
 
 const createTaskScheduleEvent = (id: string, plannedForDay: string): ScheduleEvent => ({

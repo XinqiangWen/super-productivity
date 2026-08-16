@@ -8,6 +8,7 @@ import {
   HostListener,
   inject,
   input,
+  OnInit,
   OnDestroy,
   output,
   signal,
@@ -46,7 +47,7 @@ type Timeout = NodeJS.Timeout | number | undefined;
   styleUrl: './create-task-placeholder.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateTaskPlaceholderComponent implements OnDestroy {
+export class CreateTaskPlaceholderComponent implements OnInit, OnDestroy {
   T: typeof T = T;
 
   private _taskService = inject(TaskService);
@@ -62,6 +63,7 @@ export class CreateTaskPlaceholderComponent implements OnDestroy {
   isEditMode = input.required<boolean>();
   time = input<string>();
   date = input<string>();
+  defaultForDayMode = input(false);
 
   // Task selection state
   selectedTask = signal<Task | null>(null);
@@ -121,6 +123,10 @@ export class CreateTaskPlaceholderComponent implements OnDestroy {
         this._focusSelectTaskMinimal();
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.isForDayMode.set(this.defaultForDayMode());
   }
 
   ngOnDestroy(): void {

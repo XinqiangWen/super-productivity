@@ -9,12 +9,14 @@ import {
 } from '@angular/core';
 import { ScheduleEvent } from '../schedule.model';
 import { ScheduleEventComponent } from '../schedule-event/schedule-event.component';
+import { CreateTaskPlaceholderComponent } from '../create-task-placeholder/create-task-placeholder.component';
 import { safeFormatDate } from 'src/app/util/safe-format-date';
 import { ScheduleService } from '../schedule.service';
 import { DateTimeFormatService } from 'src/app/core/date-time-format/date-time-format.service';
 import { parseDbDateStr } from 'src/app/util/parse-db-date-str';
 import { TranslatePipe, TranslateService, TranslateStore } from '@ngx-translate/core';
 import { getPluralKey } from '../../../util/get-plural-key';
+import { T } from '../../../t.const';
 
 const MONTH_EVENT_HEIGHT_PX = 22;
 
@@ -92,13 +94,14 @@ export const calculateMonthEventLimit = (
 
 @Component({
   selector: 'schedule-month',
-  imports: [ScheduleEventComponent, TranslatePipe],
+  imports: [ScheduleEventComponent, CreateTaskPlaceholderComponent, TranslatePipe],
   templateUrl: './schedule-month.component.html',
   styleUrl: './schedule-month.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
 export class ScheduleMonthComponent {
+  readonly T = T;
   private _scheduleService = inject(ScheduleService);
   private _dateTimeFormatService = inject(DateTimeFormatService);
   private _translateService = inject(TranslateService);
@@ -108,6 +111,7 @@ export class ScheduleMonthComponent {
   readonly daysToShow = input<string[]>([]);
   readonly weeksToShow = input<number>(6);
   readonly firstDayOfWeek = input<number>(1);
+  readonly taskCreatorDay = signal<string | null>(null);
   private readonly _viewportSize = signal(this.getViewportSize());
 
   @HostListener('window:resize')
@@ -180,6 +184,32 @@ export class ScheduleMonthComponent {
 
   getEventsForDay(day: string): ScheduleEvent[] {
     return this._scheduleService.getEventsForDay(day, this.events() || []);
+  }
+
+  openTaskCreator(day: string, event: Event): void {
+    const target = event.target;
+    if (target instanceof Element && target.closest('.month-event')) {
+      return;
+    }
+
+    this.taskCreatorDay.set(day);
+  }
+
+  onDayCellKeydown(day: string, event: KeyboardEvent): void {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+
+    event.preventDefault();
+    this.openTaskCreator(day, event);
+  }
+
+  closeTaskCreator(): void {
+    this.taskCreatorDay.set(null);
   }
 
   getVisibleEvents(events: ScheduleEvent[]): ScheduleEvent[] {

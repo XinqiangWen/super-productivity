@@ -16,17 +16,31 @@
       <div
         class="month-day-cell {{ getDayClass(day) }}"
         [attr.data-day]="day"
-        [attr.aria-label]="day"
+        [attr.aria-label]="day + ': ' + (T.F.SCHEDULE.CLICK_TO_CREATE_TASK | translate)"
+        tabindex="0"
         style="grid-row: {{ weekIndex + 2 }}; grid-column: {{ dayIndex + 1 }}"
+        (click)="openTaskCreator(day, $event)"
+        (keydown)="onDayCellKeydown(day, $event)"
       >
         <div class="month-day-header">
           <span class="month-day-number">{{ dayNumberByDay()[day] }}</span>
         </div>
         <div class="month-day-events">
+          @if (taskCreatorDay() === day) {
+            <create-task-placeholder
+              class="month-create-task"
+              [isEditMode]="true"
+              time="12:00"
+              [date]="day"
+              [defaultForDayMode]="true"
+              (editEnd)="closeTaskCreator()"
+            ></create-task-placeholder>
+          }
           @for (ev of visibleDayEvents; track ev.id) {
             <div
               class="month-event"
               [class]="ev.type"
+              (click)="$event.stopPropagation()"
             >
               <schedule-event
                 [event]="ev"
