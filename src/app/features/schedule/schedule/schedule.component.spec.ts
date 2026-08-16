@@ -1145,5 +1145,38 @@ describe('ScheduleComponent', () => {
         fixture.nativeElement.querySelector('.schedule-nav-controls--desktop-widget'),
       ).not.toBeNull();
     });
+
+    it('renders the widget navigation controls with a transparent bar and clean difference-blended ink', () => {
+      const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
+      widgetRoot.classList.add('is-calendar-widget');
+      fixture.detectChanges();
+
+      const nav = fixture.nativeElement.querySelector(
+        '.schedule-nav-controls',
+      ) as HTMLElement;
+      const navStyles = getComputedStyle(nav);
+      expect(navStyles.backgroundColor).toBe('rgba(0, 0, 0, 0)');
+      expect(navStyles.backdropFilter).toBe('none');
+
+      const title = nav.querySelector('.title') as HTMLElement;
+      const titleStyles = getComputedStyle(title);
+      expect(titleStyles.color).toBe('rgb(255, 255, 255)');
+      expect(titleStyles.mixBlendMode).toBe('difference');
+      expect(titleStyles.webkitTextStrokeWidth).toBe('0px');
+      expect(titleStyles.textShadow).toBe('none');
+
+      widgetRoot.classList.remove('is-calendar-widget');
+    });
+
+    it('does not apply the widget ink treatment outside the widget scope', () => {
+      const nav = fixture.nativeElement.querySelector(
+        '.schedule-nav-controls',
+      ) as HTMLElement;
+      const title = nav.querySelector('.title') as HTMLElement;
+      const titleStyles = getComputedStyle(title);
+
+      expect(titleStyles.mixBlendMode).not.toBe('difference');
+      expect(titleStyles.color).not.toBe('rgb(255, 255, 255)');
+    });
   });
 });

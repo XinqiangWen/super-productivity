@@ -433,49 +433,28 @@ describe('ScheduleMonthComponent', () => {
       widgetRoot.classList.remove('is-calendar-widget');
     });
 
-    it('should use a light text core for desktop widgets in dark theme', () => {
-      const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
-      document.body.classList.add('isDarkTheme');
-      widgetRoot.classList.add('is-calendar-widget');
-      fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
-      fixture.detectChanges();
-
-      const dayNumber = fixture.nativeElement.querySelector(
-        '[data-day="2026-01-15"] .month-day-number',
-      ) as HTMLElement;
-
-      expect(getComputedStyle(dayNumber).color).toBe('rgb(248, 251, 255)');
-      widgetRoot.classList.remove('is-calendar-widget');
-      document.body.classList.remove('isDarkTheme');
-    });
-
-    it('should use a light weekday text core for desktop widgets on dark wallpapers', () => {
+    it('uses clean difference-blended white ink with no stroke or shadow in the widget', () => {
       const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
       widgetRoot.classList.add('is-calendar-widget');
       fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
       fixture.detectChanges();
 
+      const cell = fixture.nativeElement.querySelector('.month-day-cell') as HTMLElement;
       const weekday = fixture.nativeElement.querySelector(
         '.weekday-header',
       ) as HTMLElement;
-
-      expect(getComputedStyle(weekday).color).toBe('rgb(248, 251, 255)');
-      widgetRoot.classList.remove('is-calendar-widget');
-    });
-
-    it('should use a crisp dark outline for desktop-widget dates over wallpaper', () => {
-      const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
-      widgetRoot.classList.add('is-calendar-widget');
-      fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
-      fixture.detectChanges();
-
       const dayNumber = fixture.nativeElement.querySelector(
         '.month-day-number',
       ) as HTMLElement;
 
-      expect(
-        getComputedStyle(dayNumber).getPropertyValue('-webkit-text-stroke-width'),
-      ).toBe('0.75px');
+      expect(getComputedStyle(cell).backgroundColor).toBe('rgba(0, 0, 0, 0)');
+      expect(getComputedStyle(weekday).backgroundColor).toBe('rgba(0, 0, 0, 0)');
+      expect(getComputedStyle(weekday).textShadow).toBe('none');
+      expect(getComputedStyle(weekday).webkitTextStrokeWidth).toBe('0px');
+      expect(getComputedStyle(weekday).mixBlendMode).toBe('difference');
+      expect(getComputedStyle(weekday).color).toBe('rgb(255, 255, 255)');
+      expect(getComputedStyle(dayNumber).color).toBe('rgb(255, 255, 255)');
+      expect(getComputedStyle(dayNumber).mixBlendMode).toBe('difference');
       widgetRoot.classList.remove('is-calendar-widget');
     });
 

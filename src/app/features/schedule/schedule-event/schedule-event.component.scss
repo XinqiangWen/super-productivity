@@ -643,18 +643,14 @@
     border-left-color: var(--project-color, #aab9dc);
     background: color-mix(in srgb, var(--project-color, #8aa5e8) 38%, #f2f5fb);
     color: #232630;
+    mix-blend-mode: normal;
 
-    .month-task-check {
-      border-color: #657084;
-    }
-
-    .title {
-      color: #232630;
-      line-height: 18px;
-    }
-
+    .title,
     .month-time {
       color: #232630;
+    }
+    .month-task-check {
+      border-color: #657084;
     }
   }
 }

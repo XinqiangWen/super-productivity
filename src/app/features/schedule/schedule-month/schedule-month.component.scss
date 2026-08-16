@@ -293,26 +293,27 @@
   .month-grid-container {
     height: calc(100vh - 50px);
     min-height: 0;
-    border-color: rgba(23, 32, 48, 0.18);
     background: transparent;
+    backdrop-filter: none;
+    border-color: rgba(23, 32, 48, 0.18);
+  }
+
+  .weekday-header,
+  .month-day-cell {
+    background: transparent;
+    backdrop-filter: none;
+    border-color: rgba(23, 32, 48, 0.18);
   }
 
   .weekday-header {
-    background: transparent;
-    border-color: rgba(23, 32, 48, 0.18);
-    backdrop-filter: none;
-    color: #f8fbff;
+    color: #fff;
     font-size: 13px;
-    -webkit-text-stroke: 0.75px rgba(20, 29, 43, 0.92);
-    paint-order: stroke fill;
+    mix-blend-mode: difference;
+    -webkit-text-stroke: 0;
+    text-shadow: none;
   }
 
   .month-day-cell {
-    background: transparent;
-    border-color: rgba(23, 32, 48, 0.18);
-    backdrop-filter: none;
-    color: #232630;
-
     &:hover,
     &:focus-visible {
       background: rgba(23, 32, 48, 0.08);
@@ -323,16 +324,12 @@
     }
   }
 
-  .month-day-number {
-    color: #f8fbff;
-    -webkit-text-stroke: 0.75px rgba(20, 29, 43, 0.92);
-    paint-order: stroke fill;
-  }
-
+  .month-day-number,
   .month-more-events {
-    color: #f8fbff;
-    -webkit-text-stroke: 0.75px rgba(20, 29, 43, 0.92);
-    paint-order: stroke fill;
+    color: #fff;
+    mix-blend-mode: difference;
+    -webkit-text-stroke: 0;
+    text-shadow: none;
   }
 }
 

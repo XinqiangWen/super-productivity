@@ -364,7 +364,9 @@ describe('ScheduleEventComponent – isReferenceCalendar', () => {
       const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
       widgetRoot.classList.add('is-calendar-widget');
       document.body.classList.add('is-calendar-widget');
-      fixture.componentRef.setInput('event', makeTaskScheduleEvent());
+      // CalendarEvent so the month view also renders the right-aligned time
+      // label; the widget skin must keep both title and time in dark ink.
+      fixture.componentRef.setInput('event', makeCalendarScheduleEvent(false));
       fixture.componentRef.setInput('isMonthView', true);
       fixture.detectChanges();
       fixture.nativeElement.style.setProperty('--project-color', '#123456');
@@ -377,6 +379,14 @@ describe('ScheduleEventComponent – isReferenceCalendar', () => {
       expect(Number(colorChannels![1])).toBeCloseTo(0.615, 2);
       expect(Number(colorChannels![2])).toBeCloseTo(0.673, 2);
       expect(Number(colorChannels![3])).toBeCloseTo(0.738, 2);
+
+      // The strip itself must not participate in the widget difference blend:
+      // it is intentionally opaque for legibility.
+      expect(getComputedStyle(fixture.nativeElement).mixBlendMode).toBe('normal');
+      const title = fixture.nativeElement.querySelector('.title') as HTMLElement;
+      const monthTime = fixture.nativeElement.querySelector('.month-time') as HTMLElement;
+      expect(getComputedStyle(title).color).toBe('rgb(35, 38, 48)');
+      expect(getComputedStyle(monthTime).color).toBe('rgb(35, 38, 48)');
 
       widgetRoot.classList.remove('is-calendar-widget');
       document.body.classList.remove('is-calendar-widget');

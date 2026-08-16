@@ -153,9 +153,10 @@
   .schedule-nav-controls .title,
   .schedule-nav-controls button,
   .schedule-nav-controls mat-icon {
-    color: #f8fbff;
-    -webkit-text-stroke: 0.75px rgba(20, 29, 43, 0.92);
-    paint-order: stroke fill;
+    color: #fff;
+    mix-blend-mode: difference;
+    -webkit-text-stroke: 0;
+    text-shadow: none;
   }
 
   .scroll-wrapper {
