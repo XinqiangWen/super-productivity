@@ -121,6 +121,18 @@ body {
   width: 100%;
   height: 100%;
 
+  // The Electron desktop calendar runs in a native transparent window. This
+  // selector is deliberately scoped to that renderer so ordinary application
+  // themes retain their opaque canvas.
+  &:has(.app-container.is-calendar-widget) {
+    background: transparent !important;
+
+    &::before {
+      display: none;
+      opacity: 0;
+    }
+  }
+
   &:before {
     display: none;
     transition: 1s opacity;

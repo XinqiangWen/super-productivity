@@ -8,6 +8,7 @@ import { join } from 'path';
 import { assertSecureWebPreferences } from '../web-preferences-guard';
 import { IPC } from '../shared-with-frontend/ipc-events.const';
 import { isAppOriginUrl } from '../navigation-guard';
+import { IS_MAC } from '../common.const';
 
 let calendarWidgetWin: BrowserWindow | null = null;
 let mainWindowRef: BrowserWindow | null = null;
@@ -57,7 +58,11 @@ export const openCalendarWidget = (): void => {
     y: workArea.y + 24,
     title: 'Super Productivity 月历',
     frame: false,
-    transparent: false,
+    // macOS does not reliably support native drag/edge-resize for transparent
+    // frameless windows. Keep its companion window solid so the interactive
+    // desktop calendar remains movable and resizable there.
+    transparent: !IS_MAC,
+    backgroundColor: IS_MAC ? '#f5f7fb' : '#00000000',
     alwaysOnTop: true,
     skipTaskbar: true,
     resizable: true,
@@ -65,6 +70,8 @@ export const openCalendarWidget = (): void => {
     minHeight: 480,
     maxWidth: 1600,
     maxHeight: 1100,
+    hasShadow: IS_MAC,
+    roundedCorners: IS_MAC,
     autoHideMenuBar: true,
     webPreferences,
   });

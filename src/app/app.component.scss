@@ -18,6 +18,13 @@
   display: none;
 }
 
+.app-container.is-calendar-widget,
+.app-container.is-calendar-widget .main-content,
+.app-container.is-calendar-widget right-panel,
+.app-container.is-calendar-widget right-panel .content {
+  background: transparent;
+}
+
 // Vertical action bar (opt-in via misc.isVerticalActionBar): reserve a
 // column on the right for the fixed action strip teleported by main-header
 // (desktop only). The strip is position: fixed, so this padding keeps the

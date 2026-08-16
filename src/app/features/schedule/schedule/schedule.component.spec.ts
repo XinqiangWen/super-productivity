@@ -1123,4 +1123,12 @@ describe('ScheduleComponent', () => {
       expect(mockLayoutService.selectedTimeView()).toBe('day');
     });
   });
+
+  describe('desktop calendar widget presentation', () => {
+    it('marks its navigation bar for the transparent desktop widget skin', () => {
+      expect(
+        fixture.nativeElement.querySelector('.schedule-nav-controls--desktop-widget'),
+      ).not.toBeNull();
+    });
+  });
 });

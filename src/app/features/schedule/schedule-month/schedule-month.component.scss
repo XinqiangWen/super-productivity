@@ -287,6 +287,33 @@
   }
 }
 
+// The Electron companion uses a transparent native window. Keep the calendar
+// itself legible without repainting the whole desktop-sized surface opaque.
+:host-context(.is-calendar-widget) {
+  .month-grid-container {
+    height: calc(100vh - 42px);
+    min-height: 0;
+    border-color: color-mix(in srgb, var(--separator-color) 58%, transparent);
+    background: transparent;
+  }
+
+  .weekday-header {
+    background: color-mix(in srgb, var(--bg) 56%, transparent);
+    border-color: color-mix(in srgb, var(--separator-color) 58%, transparent);
+    backdrop-filter: blur(14px);
+  }
+
+  .month-day-cell {
+    background: color-mix(in srgb, var(--bg) 42%, transparent);
+    border-color: color-mix(in srgb, var(--separator-color) 48%, transparent);
+
+    &:hover,
+    &:focus-visible {
+      background: color-mix(in srgb, var(--bg-lighter) 72%, transparent);
+    }
+  }
+}
+
 // Dense desktop month presentation. These overrides intentionally keep the
 // existing responsive data model while replacing the card-like grid chrome.
 .month-grid-container {

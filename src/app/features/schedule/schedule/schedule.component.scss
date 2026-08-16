@@ -118,15 +118,41 @@
 }
 
 :host-context(.is-calendar-widget) {
+  background: transparent;
+
   .schedule-nav-controls {
     -webkit-app-region: drag;
     min-height: 42px;
     padding-left: var(--s);
+    border-color: color-mix(in srgb, var(--separator-color) 65%, transparent);
+    background: color-mix(in srgb, var(--bg) 62%, transparent);
+    backdrop-filter: blur(18px) saturate(1.1);
   }
 
   .schedule-nav-controls button,
   .schedule-nav-controls [matMenuTriggerFor] {
     -webkit-app-region: no-drag;
+  }
+
+  .schedule-nav-controls--desktop-widget {
+    gap: var(--s-half);
+
+    .title {
+      order: -1;
+      margin-left: 0;
+      margin-right: auto;
+      padding-left: var(--s-half);
+      text-align: left;
+    }
+
+    .date-nav-group {
+      margin-left: auto;
+    }
+  }
+
+  .scroll-wrapper {
+    overflow: hidden;
+    background: transparent;
   }
 }
 
