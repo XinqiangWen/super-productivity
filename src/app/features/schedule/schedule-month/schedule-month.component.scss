@@ -287,33 +287,33 @@
   }
 }
 
-// The desktop companion keeps a clean white calendar surface; task colours
-// carry the visual hierarchy instead of a wallpaper-dependent backdrop.
+// The desktop companion intentionally lets the wallpaper show through while
+// keeping a restrained glass surface behind the interactive calendar grid.
 :host-context(.is-calendar-widget) {
   .month-grid-container {
     height: calc(100vh - 50px);
     min-height: 0;
-    border-color: #f0f1f3;
-    background: #fff;
+    border-color: rgba(255, 255, 255, 0.46);
+    background: transparent;
   }
 
   .weekday-header {
-    background: #fff;
-    border-color: #f0f1f3;
-    backdrop-filter: none;
-    color: #8b8f98;
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.46);
+    backdrop-filter: blur(16px);
+    color: #232630;
     font-size: 13px;
   }
 
   .month-day-cell {
-    background: #fff;
-    border-color: #f0f1f3;
-    backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.56);
+    border-color: rgba(255, 255, 255, 0.46);
+    backdrop-filter: blur(16px);
     color: #232630;
 
     &:hover,
     &:focus-visible {
-      background: #fafbfc;
+      background: rgba(255, 255, 255, 0.72);
     }
 
     &.today .month-day-number {
@@ -326,7 +326,7 @@
   }
 
   .month-more-events {
-    color: #6d727c;
+    color: #232630;
   }
 }
 

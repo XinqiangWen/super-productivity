@@ -403,7 +403,7 @@ describe('ScheduleMonthComponent', () => {
       expect(cell.getAttribute('aria-label')).toContain('15');
     });
 
-    it('should use the clean white TickTick-style surface for desktop-widget day cells', () => {
+    it('should keep desktop-widget day cells translucent so the wallpaper remains visible', () => {
       const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
       widgetRoot.classList.add('is-calendar-widget');
       fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
@@ -413,7 +413,7 @@ describe('ScheduleMonthComponent', () => {
         '[data-day="2026-01-15"]',
       ) as HTMLElement;
 
-      expect(getComputedStyle(cell).backgroundColor).toBe('rgb(255, 255, 255)');
+      expect(getComputedStyle(cell).backgroundColor).toBe('rgba(255, 255, 255, 0.56)');
       widgetRoot.classList.remove('is-calendar-widget');
     });
 
@@ -431,6 +431,18 @@ describe('ScheduleMonthComponent', () => {
       expect(getComputedStyle(dayNumber).color).toBe('rgb(35, 38, 48)');
       widgetRoot.classList.remove('is-calendar-widget');
       document.body.classList.remove('isDarkTheme');
+    });
+
+    it('should use high-contrast weekday ink for desktop widgets on dark wallpapers', () => {
+      const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
+      widgetRoot.classList.add('is-calendar-widget');
+      fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
+      fixture.detectChanges();
+
+      const weekday = fixture.nativeElement.querySelector('.weekday-header') as HTMLElement;
+
+      expect(getComputedStyle(weekday).color).toBe('rgb(35, 38, 48)');
+      widgetRoot.classList.remove('is-calendar-widget');
     });
 
     it('should keep the overflow count in sync with the rendered event limit', () => {

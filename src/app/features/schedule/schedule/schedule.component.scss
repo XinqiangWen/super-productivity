@@ -118,15 +118,15 @@
 }
 
 :host-context(.is-calendar-widget) {
-  background: #fff;
+  background: transparent;
 
   .schedule-nav-controls {
     -webkit-app-region: drag;
     min-height: 50px;
     padding: 0 14px;
-    border-color: #f0f1f3;
-    background: #fff;
-    backdrop-filter: none;
+    border-color: rgba(255, 255, 255, 0.46);
+    background: rgba(255, 255, 255, 0.64);
+    backdrop-filter: blur(16px);
   }
 
   .schedule-nav-controls button,
@@ -158,7 +158,7 @@
 
   .scroll-wrapper {
     overflow: hidden;
-    background: #fff;
+    background: transparent;
   }
 }
 
