@@ -28,7 +28,7 @@
     rows="3"
     placeholder="准备做什么？"
     [ngModel]="title()"
-    (ngModelChange)="title.set($event)"
+    (ngModelChange)="onTitleChanged($event)"
     (keydown)="onTitleKeydown($event)"
   ></textarea>
 
@@ -56,7 +56,7 @@
       <button
         type="button"
         class="task-composer__save-button"
-        [disabled]="!title().trim() || isSubmitting() || submissionError()"
+        [disabled]="!title().trim() || isSubmitting() || hasUncertainSubmissionFailure()"
         (click)="submit()"
       >
         添加
@@ -70,20 +70,56 @@
       aria-label="日期与时间"
     >
       <div class="task-composer__date-tabs">
-        <span class="is-active">日期</span>
-        <span>时间段</span>
+        <button
+          type="button"
+          [class.is-active]="activeDatePanelTab() === 'date'"
+          [attr.aria-pressed]="activeDatePanelTab() === 'date'"
+          (click)="selectDatePanelTab('date')"
+        >
+          日期
+        </button>
+        <button
+          type="button"
+          [class.is-active]="activeDatePanelTab() === 'timeRange'"
+          [attr.aria-pressed]="activeDatePanelTab() === 'timeRange'"
+          (click)="selectDatePanelTab('timeRange')"
+        >
+          时间段
+        </button>
       </div>
-      <datetime-picker
-        [selectedDate]="selectedDate()"
-        [selectedTime]="selectedTime()"
-        [selectedReminderCfgId]="selectedReminder()"
-        [showQuickAccess]="true"
-        (dateSelected)="onDateSelected($event)"
-        (timeChanged)="selectedTime.set($event)"
-        (reminderChanged)="selectedReminder.set($event)"
-        (quickAccessClick)="onQuickAccessClick($event)"
-        (enterSubmit)="submit()"
-      ></datetime-picker>
+      @if (activeDatePanelTab() === 'date') {
+        <datetime-picker
+          [selectedDate]="selectedDate()"
+          [selectedTime]="selectedTime()"
+          [selectedReminderCfgId]="selectedReminder()"
+          [showQuickAccess]="true"
+          (dateSelected)="onDateSelected($event)"
+          (timeChanged)="onTimeChanged($event)"
+          (reminderChanged)="selectedReminder.set($event)"
+          (quickAccessClick)="onQuickAccessClick($event)"
+          (enterSubmit)="submit()"
+        ></datetime-picker>
+      } @else {
+        <div class="task-composer__time-range">
+          <label>
+            <span>开始时间</span>
+            <input
+              type="time"
+              [ngModel]="selectedTime()"
+              (ngModelChange)="onTimeChanged($event)"
+            />
+          </label>
+          <span class="task-composer__time-range-separator">至</span>
+          <label>
+            <span>结束时间</span>
+            <input
+              type="time"
+              [ngModel]="selectedEndTime()"
+              (ngModelChange)="onEndTimeChanged($event)"
+            />
+          </label>
+        </div>
+      }
       <div class="task-composer__date-actions">
         <button
           type="button"

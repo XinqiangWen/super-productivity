@@ -383,7 +383,11 @@
   margin: 0;
 
   .month-schedule-event {
-    display: block;
+    // schedule-event contains a checkbox, title and optional time label. It
+    // must stay flex here; block layout puts the title on a second line that
+    // is then clipped by the compact 22px month-event height.
+    display: flex;
+    align-items: center;
     width: 100%;
     box-sizing: border-box;
     padding: 0;

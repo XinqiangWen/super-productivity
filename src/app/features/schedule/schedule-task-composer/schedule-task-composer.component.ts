@@ -26,6 +26,7 @@ import { parseDbDateStr } from '../../../util/parse-db-date-str';
 import { DateTimePickerComponent } from '../../../ui/datetime-picker/datetime-picker.component';
 
 const DEFAULT_TIME_ESTIMATE = 30 * 60 * 1000;
+type DatePanelTab = 'date' | 'timeRange';
 
 @Component({
   selector: 'schedule-task-composer',
@@ -45,14 +46,17 @@ export class ScheduleTaskComposerComponent {
   readonly title = signal('');
   readonly selectedDay = signal('');
   readonly selectedTime = signal<string | null>(null);
+  readonly selectedEndTime = signal<string | null>(null);
   readonly selectedReminder = signal<TaskReminderOptionId>(
     this._globalConfigService.cfg()?.reminder?.defaultTaskRemindOption ??
       DEFAULT_GLOBAL_CONFIG.reminder.defaultTaskRemindOption ??
       TaskReminderOptionId.DoNotRemind,
   );
   readonly isDatePanelOpen = signal(false);
+  readonly activeDatePanelTab = signal<DatePanelTab>('date');
   readonly isSubmitting = signal(false);
   readonly submissionError = signal<string | null>(null);
+  readonly hasUncertainSubmissionFailure = signal(false);
   readonly titleInput = viewChild<ElementRef<HTMLTextAreaElement>>('titleInput');
   readonly selectedDate = computed(() => {
     const day = this.selectedDay() || this.day();
@@ -67,6 +71,7 @@ export class ScheduleTaskComposerComponent {
 
   onDateSelected(date: Date): void {
     this.selectedDay.set(getDbDateStr(date));
+    this.clearValidationError();
   }
 
   toggleDatePanel(): void {
@@ -76,7 +81,28 @@ export class ScheduleTaskComposerComponent {
   clearDateAndTime(): void {
     this.selectedDay.set(this.day());
     this.selectedTime.set(null);
+    this.selectedEndTime.set(null);
     this.selectedReminder.set(TaskReminderOptionId.DoNotRemind);
+    this.clearValidationError();
+  }
+
+  selectDatePanelTab(tab: DatePanelTab): void {
+    this.activeDatePanelTab.set(tab);
+  }
+
+  onTitleChanged(title: string): void {
+    this.title.set(title);
+    this.clearValidationError();
+  }
+
+  onTimeChanged(time: string | null): void {
+    this.selectedTime.set(time || null);
+    this.clearValidationError();
+  }
+
+  onEndTimeChanged(time: string | null): void {
+    this.selectedEndTime.set(time || null);
+    this.clearValidationError();
   }
 
   onQuickAccessClick(option: 'today' | 'tomorrow' | 'nextWeek' | 'nextMonth'): void {
@@ -114,13 +140,23 @@ export class ScheduleTaskComposerComponent {
 
   async submit(): Promise<void> {
     const title = this.title().trim();
-    if (!title || this.isSubmitting() || this.submissionError()) {
+    if (!title || this.isSubmitting() || this.hasUncertainSubmissionFailure()) {
+      return;
+    }
+
+    const day = this.selectedDay() || this.day();
+    const timeEstimate = this.getTimeEstimate();
+    if (timeEstimate === null) {
+      this.submissionError.set(
+        this.selectedEndTime() && !this.selectedTime()
+          ? '请先填写开始时间。'
+          : '结束时间必须晚于开始时间。',
+      );
       return;
     }
 
     this.isSubmitting.set(true);
-    const day = this.selectedDay() || this.day();
-    const additional = { timeEstimate: DEFAULT_TIME_ESTIMATE };
+    const additional = { timeEstimate };
 
     try {
       if (this.selectedTime()) {
@@ -145,6 +181,7 @@ export class ScheduleTaskComposerComponent {
       }
       this.closed.emit();
     } catch {
+      this.hasUncertainSubmissionFailure.set(true);
       this.submissionError.set('任务创建结果未确认，请先检查日历以避免重复添加。');
     } finally {
       this.isSubmitting.set(false);
@@ -153,6 +190,32 @@ export class ScheduleTaskComposerComponent {
 
   close(): void {
     this.closed.emit();
+  }
+
+  private getTimeEstimate(): number | null {
+    const start = this.selectedTime();
+    const end = this.selectedEndTime();
+    if (!start && !end) {
+      return DEFAULT_TIME_ESTIMATE;
+    }
+
+    if (start && !end) {
+      return DEFAULT_TIME_ESTIMATE;
+    }
+
+    if (!start || !end) {
+      return null;
+    }
+
+    const duration =
+      new Date(`2000-01-01T${end}`).getTime() - new Date(`2000-01-01T${start}`).getTime();
+    return duration > 0 ? duration : null;
+  }
+
+  private clearValidationError(): void {
+    if (!this.hasUncertainSubmissionFailure()) {
+      this.submissionError.set(null);
+    }
   }
 
   @HostListener('document:keydown.escape', ['$event'])

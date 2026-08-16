@@ -77,6 +77,44 @@ describe('ScheduleTaskComposerComponent', () => {
     expect(taskService.add).not.toHaveBeenCalled();
   });
 
+  it('opens time-range mode without assigning a time to the task', () => {
+    component.selectDatePanelTab('timeRange');
+
+    expect(component.activeDatePanelTab()).toBe('timeRange');
+    expect(component.selectedTime()).toBeNull();
+    expect(component.selectedEndTime()).toBeNull();
+  });
+
+  it('uses the selected time range as the task duration', async () => {
+    fixture.componentRef.setInput('day', '2026-08-16');
+    component.title.set('产品评审');
+    component.selectDatePanelTab('timeRange');
+    component.selectedTime.set('09:00');
+    component.selectedEndTime.set('10:30');
+
+    await component.submit();
+
+    expect(taskService.addAndSchedule).toHaveBeenCalledWith(
+      '产品评审',
+      jasmine.objectContaining({ timeEstimate: 90 * 60 * 1000 }),
+      new Date('2026-08-16T09:00').getTime(),
+      jasmine.anything(),
+    );
+  });
+
+  it('rejects a time range that ends before it starts', async () => {
+    fixture.componentRef.setInput('day', '2026-08-16');
+    component.title.set('跨日未确认');
+    component.selectDatePanelTab('timeRange');
+    component.selectedTime.set('22:00');
+    component.selectedEndTime.set('01:00');
+
+    await component.submit();
+
+    expect(component.submissionError()).toContain('结束时间');
+    expect(taskService.addAndSchedule).not.toHaveBeenCalled();
+  });
+
   it('prevents a duplicate submit after a creation failure', async () => {
     fixture.componentRef.setInput('day', '2026-08-16');
     component.title.set('无法确认的任务');
