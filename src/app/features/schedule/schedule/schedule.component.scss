@@ -124,7 +124,7 @@
     -webkit-app-region: drag;
     min-height: 50px;
     padding: 0 14px;
-    border-color: rgba(255, 255, 255, 0.58);
+    border-color: rgba(23, 32, 48, 0.18);
     background: transparent;
     backdrop-filter: none;
   }
@@ -153,10 +153,9 @@
   .schedule-nav-controls .title,
   .schedule-nav-controls button,
   .schedule-nav-controls mat-icon {
-    color: #232630;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.96);
+    color: #f8fbff;
+    -webkit-text-stroke: 0.75px rgba(20, 29, 43, 0.92);
     paint-order: stroke fill;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.88);
   }
 
   .scroll-wrapper {

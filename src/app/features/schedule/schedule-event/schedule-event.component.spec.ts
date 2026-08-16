@@ -347,6 +347,28 @@ describe('ScheduleEventComponent – isReferenceCalendar', () => {
       );
     });
 
+    it('should keep a deep project colour on a readable light widget task strip', () => {
+      const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
+      widgetRoot.classList.add('is-calendar-widget');
+      document.body.classList.add('is-calendar-widget');
+      fixture.componentRef.setInput('event', makeTaskScheduleEvent());
+      fixture.componentRef.setInput('isMonthView', true);
+      fixture.detectChanges();
+      fixture.nativeElement.style.setProperty('--project-color', '#123456');
+
+      const colorChannels = getComputedStyle(fixture.nativeElement).backgroundColor.match(
+        /color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\)/,
+      );
+
+      expect(colorChannels).not.toBeNull();
+      expect(Number(colorChannels![1])).toBeCloseTo(0.615, 2);
+      expect(Number(colorChannels![2])).toBeCloseTo(0.673, 2);
+      expect(Number(colorChannels![3])).toBeCloseTo(0.738, 2);
+
+      widgetRoot.classList.remove('is-calendar-widget');
+      document.body.classList.remove('is-calendar-widget');
+    });
+
     it('should complete a task from the month-view checkbox without selecting it', () => {
       const store = TestBed.inject(MockStore);
       const dispatchSpy = spyOn(store, 'dispatch');

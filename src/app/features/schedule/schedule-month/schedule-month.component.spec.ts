@@ -417,7 +417,7 @@ describe('ScheduleMonthComponent', () => {
       widgetRoot.classList.remove('is-calendar-widget');
     });
 
-    it('should keep dark ink on the white desktop-widget surface in dark theme', () => {
+    it('should use a light text core for desktop widgets in dark theme', () => {
       const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
       document.body.classList.add('isDarkTheme');
       widgetRoot.classList.add('is-calendar-widget');
@@ -428,12 +428,12 @@ describe('ScheduleMonthComponent', () => {
         '[data-day="2026-01-15"] .month-day-number',
       ) as HTMLElement;
 
-      expect(getComputedStyle(dayNumber).color).toBe('rgb(35, 38, 48)');
+      expect(getComputedStyle(dayNumber).color).toBe('rgb(248, 251, 255)');
       widgetRoot.classList.remove('is-calendar-widget');
       document.body.classList.remove('isDarkTheme');
     });
 
-    it('should use high-contrast weekday ink for desktop widgets on dark wallpapers', () => {
+    it('should use a light weekday text core for desktop widgets on dark wallpapers', () => {
       const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
       widgetRoot.classList.add('is-calendar-widget');
       fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
@@ -441,11 +441,11 @@ describe('ScheduleMonthComponent', () => {
 
       const weekday = fixture.nativeElement.querySelector('.weekday-header') as HTMLElement;
 
-      expect(getComputedStyle(weekday).color).toBe('rgb(35, 38, 48)');
+      expect(getComputedStyle(weekday).color).toBe('rgb(248, 251, 255)');
       widgetRoot.classList.remove('is-calendar-widget');
     });
 
-    it('should outline desktop-widget dates so they remain legible over wallpaper', () => {
+    it('should use a crisp dark outline for desktop-widget dates over wallpaper', () => {
       const widgetRoot = fixture.nativeElement.parentElement as HTMLElement;
       widgetRoot.classList.add('is-calendar-widget');
       fixture.componentRef.setInput('daysToShow', ['2026-01-15']);
@@ -456,7 +456,7 @@ describe('ScheduleMonthComponent', () => {
       ) as HTMLElement;
 
       expect(getComputedStyle(dayNumber).getPropertyValue('-webkit-text-stroke-width')).toBe(
-        '1px',
+        '0.75px',
       );
       widgetRoot.classList.remove('is-calendar-widget');
     });

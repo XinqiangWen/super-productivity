@@ -293,30 +293,29 @@
   .month-grid-container {
     height: calc(100vh - 50px);
     min-height: 0;
-    border-color: rgba(255, 255, 255, 0.58);
+    border-color: rgba(23, 32, 48, 0.18);
     background: transparent;
   }
 
   .weekday-header {
     background: transparent;
-    border-color: rgba(255, 255, 255, 0.58);
+    border-color: rgba(23, 32, 48, 0.18);
     backdrop-filter: none;
-    color: #232630;
+    color: #f8fbff;
     font-size: 13px;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.96);
+    -webkit-text-stroke: 0.75px rgba(20, 29, 43, 0.92);
     paint-order: stroke fill;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.88);
   }
 
   .month-day-cell {
     background: transparent;
-    border-color: rgba(255, 255, 255, 0.58);
+    border-color: rgba(23, 32, 48, 0.18);
     backdrop-filter: none;
     color: #232630;
 
     &:hover,
     &:focus-visible {
-      background: rgba(255, 255, 255, 0.16);
+      background: rgba(23, 32, 48, 0.08);
     }
 
     &.today .month-day-number {
@@ -325,17 +324,15 @@
   }
 
   .month-day-number {
-    color: #232630;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.96);
+    color: #f8fbff;
+    -webkit-text-stroke: 0.75px rgba(20, 29, 43, 0.92);
     paint-order: stroke fill;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.88);
   }
 
   .month-more-events {
-    color: #232630;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.96);
+    color: #f8fbff;
+    -webkit-text-stroke: 0.75px rgba(20, 29, 43, 0.92);
     paint-order: stroke fill;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.88);
   }
 }
 
